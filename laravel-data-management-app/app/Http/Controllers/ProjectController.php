@@ -61,7 +61,26 @@ class ProjectController extends Controller
             'updated_at' => now(),
         ];
 
-            project::create($data);
+            $project = project::create($data);
+
+
+
+            // Handle file uploads
+            if ($request->hasFile('files')) {
+                foreach ($request->file('files') as $file) {
+                    $path = $file->store('project_files'); // Store file and get path
+
+                    ProjectFile::create([
+                        'project_id' => $project->id,
+                        'file' => $path,
+                        'mime_type' => $file->getClientMimeType(),
+                        'created_by' => $userId,
+                        'updated_by' => $userId,
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ]);
+                }
+            }
     
             $data1 = project::all();
 
