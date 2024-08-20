@@ -47,4 +47,9 @@ class project extends Model
     {
         return $this->belongsTo(User::class, 'updated_by');
     }
+
+    public function files()
+{
+    return $this->hasMany(ProjectFile::class, 'project_id');
+}
 }

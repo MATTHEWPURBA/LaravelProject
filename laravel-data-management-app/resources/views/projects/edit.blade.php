@@ -32,5 +32,19 @@
             </div>
         </div>
     </form>
+
+    @if($data->files)
+    <h3>Uploaded Files:</h3>
+    <ul>
+        @foreach($data->files as $file)
+            <li>
+                <a href="{{ Storage::url($file->file) }}">{{ $file->file }}</a>
+            </li>
+        @endforeach
+    </ul>
+    @endif
+
+
+
 @endsection
     <!-- AKHIR FORM -->

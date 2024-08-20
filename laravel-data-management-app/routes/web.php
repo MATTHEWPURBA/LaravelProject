@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\ProjectFileController;
 use App\Http\Controllers\SessionController;
 use App\Http\Middleware\isLogin;
 
@@ -21,6 +22,7 @@ Route::middleware([isLogin::class])->group(function () {
 // Routes that require authentication
 Route::middleware(['auth'])->group(function () {
     Route::resource('project', ProjectController::class);
+    Route::post('project/{project}/files', [ProjectFileController::class, 'store'])->name('project-files.store');
 });
 
 Route::get('/sesi/logout', [SessionController::class, 'logout'])->name('logout');

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\project;
+use App\Models\ProjectFile;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -120,6 +121,20 @@ class ProjectController extends Controller
         ];
 
         project::where('id',$id)->update($data);
+
+        // Handle file upload
+        if ($request->hasFile('file')) {
+            $path = $request->file('file')->store('project_files');
+            ProjectFile::create([
+                'project_id' => $id,
+                'file' => $path,
+                'mime_type' => $request->file('file')->getClientMimeType(),
+                'created_by' => $userId,
+                'updated_by' => $userId,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+        }
 
         return redirect('/project')->with('success','Berhasil Update Data');
             
