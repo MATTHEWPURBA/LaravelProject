@@ -17,6 +17,8 @@ class ProjectFile extends Model
         'mime_type',
         'created_by',
         'updated_by',
+        'created_at',
+        'updated_at',
     ];
 
     // Disable timestamps if you are manually handling them
