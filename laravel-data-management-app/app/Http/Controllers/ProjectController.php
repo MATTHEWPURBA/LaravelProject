@@ -35,16 +35,31 @@ class ProjectController extends Controller
         if (Auth::check()) {
             $userId = Auth::id();
     
-            $data = [
-                'project_name' => $request->project_name,
-                'project_description' => $request->project_description,
-                'deadline' => $request->deadline,
-                'created_by' => $userId,
-                'updated_by' => $userId,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ];
-    
+           // Validate the incoming request data with custom messages
+        $validatedData = $request->validate([
+            'project_name' => 'required|string|max:255',
+            'project_description' => 'required|string',
+            'deadline' => 'required|date|after:today',
+        ], [
+            'project_name.required' => 'The project name is required.',
+            'project_name.max' => 'The project name must not exceed 255 characters.',
+            'project_description.required' => 'The project description is required.',
+            'deadline.required' => 'The deadline is required.',
+            'deadline.date' => 'The deadline must be a valid date.',
+            'deadline.after' => 'The deadline must be a future date.',
+        ]);
+
+        // Create the project with validated data
+        $data = [
+            'project_name' => $validatedData['project_name'],
+            'project_description' => $validatedData['project_description'],
+            'deadline' => $validatedData['deadline'],
+            'created_by' => $userId,
+            'updated_by' => $userId,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ];
+
             project::create($data);
     
             $data1 = project::all();
@@ -67,15 +82,50 @@ class ProjectController extends Controller
      */
     public function edit(string $id)
     {
-        return 'abc';
+        $data = project::where('id', $id)->first();
+        return view('projects/edit')->with('data', $data);
     }
-
+ 
     /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, string $id)
     {
+        if (Auth::check()) {
+            $userId = Auth::id();
+    
+           // Validate the incoming request data with custom messages
+        $validatedData = $request->validate([
+            'project_name' => 'required|string|max:255',
+            'project_description' => 'required|string',
+            'deadline' => 'required|date|after:today',
+        ], [
+            'project_name.required' => 'The project name is required.',
+            'project_name.max' => 'The project name must not exceed 255 characters.',
+            'project_description.required' => 'The project description is required.',
+            'deadline.required' => 'The deadline is required.',
+            'deadline.date' => 'The deadline must be a valid date.',
+            'deadline.after' => 'The deadline must be a future date.',
+        ]);
 
+        // Create the project with validated data
+        $data = [
+            'project_name' => $validatedData['project_name'],
+            'project_description' => $validatedData['project_description'],
+            'deadline' => $validatedData['deadline'],
+            'created_by' => $userId,
+            'updated_by' => $userId,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ];
+
+        project::where('id',$id)->update($data);
+
+        return redirect('/project')->with('success','Berhasil Update Data');
+            
+    } else {
+            return redirect()->route('login')->with('error', 'You must be logged in to create a project.');
+        }
     }
 
     /**
@@ -83,6 +133,8 @@ class ProjectController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        project::where('id',$id)->delete();
+        return redirect('/project')->with('success','Berhasil Hapus Data');
+
     }
 }

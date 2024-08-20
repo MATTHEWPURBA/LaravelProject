@@ -18,8 +18,8 @@
                     <p class="card-text">{{ $project->project_description }}</p>
                     <p class="card-text"><strong>Deadline:</strong> {{ $project->deadline }}</p>
                     <div class="d-flex justify-content-between">
-                        <a href="{{ url('projects/edit/' . $project->id) }}" class="btn btn-warning btn-sm">Edit</a>
-                        <form action="{{ url('projects/' . $project->id) }}" method="POST">
+                        <a href="{{ url('/project/' . $project->id. '/edit') }}" class="btn btn-warning btn-sm">Edit</a>
+                        <form action="{{ url('/project/' . $project->id) }}" method="POST">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="btn btn-danger btn-sm">Delete</button>
