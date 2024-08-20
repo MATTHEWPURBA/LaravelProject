@@ -1,7 +1,7 @@
 @extends('layout.template')
 <!-- START FORM -->
 @section('content')
- <form action='{{ url('project') }}' method='post'> {{-- penggunaan url ini untuk arahin ke /project --}}
+ <form action='{{ route('project.store') }}' method='post'> {{-- penggunaan url ini untuk arahin ke /project --}}
     @csrf
         <div class="my-3 p-3 bg-body rounded shadow-sm">
             <div class="mb-3 row">

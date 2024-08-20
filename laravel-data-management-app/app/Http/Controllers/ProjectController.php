@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\project;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ProjectController extends Controller
 {
@@ -12,7 +14,9 @@ class ProjectController extends Controller
      */
     public function index()
     {
-        return view('projects.index');
+        $data = project::all();
+
+        return view('projects/index')->with('data',$data);
     }
 
     /**
@@ -28,15 +32,28 @@ class ProjectController extends Controller
      */
     public function store(Request $request)
     {
-        $data = [
-            'project_name' => $request->project_name,
-            'project_description' => $request->project_description,
-            'deadline' => $request->deadline,
-        ];
-        project::create($data);
-        return 'HI';
-    }
+        if (Auth::check()) {
+            $userId = Auth::id();
+    
+            $data = [
+                'project_name' => $request->project_name,
+                'project_description' => $request->project_description,
+                'deadline' => $request->deadline,
+                'created_by' => $userId,
+                'updated_by' => $userId,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ];
+    
+            project::create($data);
+    
+            $data1 = project::all();
 
+            return view('projects/index')->with('data',$data1);
+            } else {
+            return redirect()->route('login')->with('error', 'You must be logged in to create a project.');
+        }
+    }
     /**
      * Display the specified resource.
      */
@@ -50,7 +67,7 @@ class ProjectController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        return 'abc';
     }
 
     /**
