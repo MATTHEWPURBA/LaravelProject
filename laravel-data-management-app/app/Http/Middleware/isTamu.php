@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
-class isLogin
+class isTamu
 {
     /**
      * Handle an incoming request.
@@ -16,12 +16,12 @@ class isLogin
      */
     public function handle(Request $request, Closure $next): Response
     {
-        // Check if the user is authenticated
+        // If the user is authenticated, redirect them to the 'project' route
         if (Auth::check()) {
-            // Redirect authenticated users away from login and register routes
-            return redirect()->route('project.index')->with('success', 'You are already logged in.');
+            return redirect()->route('project.index')->with('success', 'You are already logged in');
         }
 
+        // Allow unauthenticated users to proceed
         return $next($request);
     }
 }
