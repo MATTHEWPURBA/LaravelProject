@@ -18,5 +18,11 @@
             <button name="submit" type="submit" class="btn btn-primary" style="background-color: #007bff; border-color: #0056b3;">Login</button>
         </div>
     </form>
+
+    <div class="text-center mt-3">
+        <p style="color: #007bff;">Don't have an account? 
+            <a href="{{ url('/sesi/register') }}" style="color: #0056b3; text-decoration: underline;">Register here</a>
+        </p>
+    </div>
 </div>
 @endsection
